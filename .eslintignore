@@ -1,0 +1,12 @@
+# config files
+./next.config.js
+./eslintrc.json
+./package.json
+./tsconfig.json
+./yarn.lock
+./gitignore
+
+# folders
+./_posts
+./public
+./styles

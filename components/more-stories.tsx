@@ -1,11 +1,12 @@
-import PostPreview from './post-preview'
-import Post from '../types/post'
+import React from "react"
+import PostPreview from "./post-preview"
+import Post from "../types/post"
 
 type Props = {
   posts: Post[]
 }
 
-const MoreStories = ({ posts }: Props) => {
+function MoreStories({ posts }: Props) {
   return (
     <section>
       <h2 className="mb-8 text-5xl md:text-7xl font-bold tracking-tighter leading-tight">
@@ -15,12 +16,7 @@ const MoreStories = ({ posts }: Props) => {
         {posts.map((post) => (
           <PostPreview
             key={post.slug}
-            title={post.title}
-            coverImage={post.coverImage}
-            date={post.date}
-            author={post.author}
-            slug={post.slug}
-            excerpt={post.excerpt}
+            post={post}
           />
         ))}
       </div>

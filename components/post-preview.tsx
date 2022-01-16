@@ -1,41 +1,51 @@
-import Avatar from './avatar'
-import DateFormatter from './date-formatter'
-import CoverImage from './cover-image'
-import Link from 'next/link'
-import Author from '../types/author'
+import React from "react"
+import Link from "next/link"
+import PostType from "../types/post"
+// import TimeToRead from "./time-to-read"
+import DateCreated from "./time-created"
 
 type Props = {
-  title: string
-  coverImage: string
-  date: string
-  excerpt: string
-  author: Author
-  slug: string
+  post: PostType
 }
 
-const PostPreview = ({
-  title,
-  coverImage,
-  date,
-  excerpt,
-  author,
-  slug,
-}: Props) => {
+function PostPreview({ post } : Props) {
   return (
-    <div>
-      <div className="mb-5">
-        <CoverImage slug={slug} title={title} src={coverImage} />
+    <div className="post-preview">
+      <h1>
+        <Link href={`/posts/${post.slug}`}><a>{post.title}</a></Link>
+      </h1>
+      <div className="post-content">
+        <p>
+          {post.content.substring(0, 200)}
+        </p>
       </div>
-      <h3 className="text-3xl mb-3 leading-snug">
-        <Link as={`/posts/${slug}`} href="/posts/[slug]">
-          <a className="hover:underline">{title}</a>
-        </Link>
-      </h3>
-      <div className="text-lg mb-4">
-        <DateFormatter dateString={date} />
+
+      <div className="post-meta text-muted d-flex">
+
+        <div className="mr-auto">
+          {/* posted date */}
+          <i className="far fa-calendar fa-fw" />
+          <DateCreated date={post.date} />
+
+          {/* time to read */}
+          {/* <i className="far fa-clock fa-fw"></i>
+          <TimeToRead length={post.content.length} /> */}
+
+          {/* categories */}
+          {/* { post.categories && <>
+              <i className="far fa-folder-open fa-fw"></i>
+              <span>{post.categories.join(", ")}</span>
+            </>
+          } */}
+        </div>
+
+        {post.pin && (
+        <div className="pin">
+          <i className="fas fa-thumbtack fa-fw" />
+          <span>Pinned</span>
+        </div>
+        )}
       </div>
-      <p className="text-lg leading-relaxed mb-4">{excerpt}</p>
-      <Avatar name={author.name} picture={author.picture} />
     </div>
   )
 }

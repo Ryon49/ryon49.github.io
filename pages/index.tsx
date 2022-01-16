@@ -1,58 +1,48 @@
-import Container from '../components/container'
-import MoreStories from '../components/more-stories'
-import HeroPost from '../components/hero-post'
-import Intro from '../components/intro'
-import Layout from '../components/layout'
-import { getAllPosts } from '../lib/api'
-import Head from 'next/head'
-import { CMS_NAME } from '../lib/constants'
-import Post from '../types/post'
+import React from "react"
+import PostPreview from "../components/post-preview"
+import RecentPosts from "../components/recent-posts"
+import { getAllPosts } from "../lib/api/post"
+import PostType from "../types/post"
 
 type Props = {
-  allPosts: Post[]
+  allPosts: PostType[]
 }
 
-const Index = ({ allPosts }: Props) => {
-  const heroPost = allPosts[0]
-  const morePosts = allPosts.slice(1)
+function Home({ allPosts }: Props) {
   return (
-    <>
-      <Layout>
-        <Head>
-          <title>Next.js Blog Example with {CMS_NAME}</title>
-        </Head>
-        <Container>
-          <Intro />
-          {heroPost && (
-            <HeroPost
-              title={heroPost.title}
-              coverImage={heroPost.coverImage}
-              date={heroPost.date}
-              author={heroPost.author}
-              slug={heroPost.slug}
-              excerpt={heroPost.excerpt}
-            />
-          )}
-          {morePosts.length > 0 && <MoreStories posts={morePosts} />}
-        </Container>
-      </Layout>
-    </>
+    <div id="main-wrapper">
+      <div id="main">
+        <div className="row">
+          {/* core */}
+          <div id="core-wrapper" className="col-12 col-lg-11 col-xl-8">
+            <div id="post-list">
+              {allPosts.map((p) => <PostPreview post={p} key={p.slug} />)}
+            </div>
+          </div>
+          {" "}
+          {/* end #core-wrapper */}
+
+          {/* pannel */}
+          <div id="panel-wrapper" className="col-xl-3 pl-2 text-muted topbar-down">
+            <div className="access">
+              {/* side panel content */}
+              <RecentPosts allPosts={allPosts} />
+            </div>
+          </div>
+          {" "}
+          {/* end #panel-wrapper */}
+        </div>
+      </div>
+    </div>
   )
 }
 
-export default Index
-
 export const getStaticProps = async () => {
-  const allPosts = getAllPosts([
-    'title',
-    'date',
-    'slug',
-    'author',
-    'coverImage',
-    'excerpt',
-  ])
+  const allPosts = getAllPosts(["slug", "date", "title", "content", "categories", "pin"])
 
   return {
     props: { allPosts },
   }
 }
+
+export default Home
