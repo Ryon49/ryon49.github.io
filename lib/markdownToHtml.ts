@@ -47,7 +47,20 @@ function hexCode(code: string) {
 }
 
 function blockCode(content: string) {
-  return hexCode(content).replace(/<pre><code class="language-(?<language>.*)">((?<code>.*\n)*?)<\/code><\/pre>/mg, (_, language, code) => renderToStaticMarkup(createElement(Code, { language, code }, null)))
+  return hexCode(content).replace(/<pre><code class="language-(?<language>.*)">((?<code>.*\n)*?)<\/code><\/pre>/mg, 
+    (_, language, code) => renderToStaticMarkup(createElement(Code, { language, code }, null)))
+}
+
+function header(code: string) {
+  return code.replaceAll(/<(?<tag>h[2-3])>(?<content>.*)<\/h[2-3]>?/gi, (_, tag, content) => {
+    let id = content.replaceAll(" ", "-")
+    return `<${tag} id=${id} tabindex="-1">
+      ${content}
+      <a href="#${id}" class="anchor">
+        <i class="fas fa-hashtag"></i>
+      </a>
+    <\/${tag}>`
+  })
 }
 
 // parse markdown to html
@@ -65,4 +78,5 @@ export default async function markdownToHtml(markdown: string) {
     .then(listHideBullet)
     .then(inlineCode)
     .then(blockCode)
+    .then(header)
 }

@@ -1,4 +1,8 @@
 {
+  "name": "react-chirpy",
+  "version": "0.1.0",
+  "description": "My personal blog, nextjs chirpy",
+
   "private": true,
   "scripts": {
     "dev": "next",

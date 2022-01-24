@@ -36,7 +36,7 @@
         "tsx": "never"
       }
     ],
-    "jsx-a11y/anchor-is-valid": 0,
+    "jsx-a11y/anchor-is-valid": 0,  // we put href in nextjs/<Link>, instead of <a>
     "react/jsx-props-no-spreading": 1
   },
   "settings": {

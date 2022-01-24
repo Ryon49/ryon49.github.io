@@ -24,20 +24,41 @@ function buildBreadCrumb(p: string) {
   return list.join("")
 }
 
+function toggle_sidebar() {
+  let body: HTMLElement = document.body
+  if (body.hasAttribute("sidebar-display")) {
+    body.removeAttribute("sidebar-display")
+  } else {
+    body.setAttribute("sidebar-display", "true")
+  }
+}
+
+function scroll_topbar() {
+  let delta = document.getElementById("topbar-wrapper")!.offsetHeight * 2
+
+  let body = document.body
+  if (document.documentElement.scrollTop > delta) {
+    body.setAttribute("data-topbar-visible", "false")
+  } else {
+    body.removeAttribute("data-topbar-visible")
+  }
+}
+
 function TopBar() {
   const { asPath } = useRouter()
 
   const bcRef = useRef<HTMLSpanElement>(null)
   useEffect(() => {
     // change breadcrumb based on current url
-    bcRef.current!.innerHTML = buildBreadCrumb(asPath)
+    bcRef.current!.innerHTML = buildBreadCrumb(asPath)    
+    window.addEventListener("scroll", (e) => scroll_topbar())
   })
   return (
     <div id="topbar-wrapper" className="row justify-content-center topbar-down">
       <div id="topbar" className="col-11 d-flex h-100 align-items-center justify-content-between">
         <span id="breadcrumb" ref={bcRef} />
 
-        <i id="sidebar-trigger" className="fas fa-bars fa-fw" />
+        <i id="sidebar-trigger" className="fas fa-bars fa-fw" onClick={toggle_sidebar}/>
 
         <div id="topbar-title">
           {asPath}

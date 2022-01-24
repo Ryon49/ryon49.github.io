@@ -43,14 +43,12 @@ function Meta() {
 
       {/* Bootstrap */}
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"/>
 
       {/* Font Awesome */}
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" />
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/base16/3024.min.css" />
-
-      <Script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" />
-
     </Head>
   )
 }

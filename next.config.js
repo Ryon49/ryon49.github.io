@@ -16,11 +16,5 @@ const myEnv = {
 
 module.exports = {
   env: myEnv,
-
-  // i18n: {
-  //   locales: ['en', 'de', 'fr'],
-  //   defaultLocale: 'en',
-  //   localeDetection: true,
-  // },
   reactStrictMode: true,
 }

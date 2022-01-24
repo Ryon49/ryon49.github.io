@@ -104,6 +104,30 @@ blockquote {
   border-left: 5px solid var(--blockquote-border-color);
   padding-left: 1rem;
   color: var(--blockquote-text-color);
+
+  &[class^="prompt-"] {
+    display: flex;
+    border-left: 0;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+
+    &::before {
+      margin-right: 0.8rem;
+      font-family: "Font Awesome 5 Free";
+      text-align: center;
+      width: 1.25rem;
+    }
+
+    p:last-child {
+      margin-bottom: 0rem;
+    }
+  }
+
+  @include prompt("note", "\f0eb", 400);
+
+  @include prompt("warning", "\f06a");
+
+  @include prompt("danger", "\f071");
 }
 
 kbd {
@@ -192,6 +216,8 @@ img[data-src] {
   &.shadow {
     filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.08));
   }
+
+  @extend %img-caption;
 }
 
 /* --- Panels --- */
@@ -247,7 +273,7 @@ img[data-src] {
     }
   }
 
-  &.topbar-down > div {
+  [data-topbar-visible=true] & > div {
     top: 6rem;
   }
 }
@@ -408,10 +434,6 @@ img[data-src] {
   font-size: 0.85rem;
   word-spacing: 1px;
 
-  .mr-auto i {
-    margin-right: 2px;
-  }
-
   a {
     &:not(:last-child) {
       margin-right: 2px;
@@ -443,13 +465,8 @@ img[data-src] {
       }
     }
 
-    &.img-link + em {
-      display: block;
-      text-align: center;
-      font-style: normal;
-      font-size: 80%;
-      padding: 0;
-      color: #6d6c6c;
+    &.img-link {
+      @extend %img-caption;
     }
 
   }
@@ -572,10 +589,6 @@ img[data-src] {
 
 .btn-box-shadow {
   box-shadow: 0 0 8px 0 var(--btn-box-shadow) !important;
-}
-
-.topbar-up {
-  top: -3rem !important; /* same as topbar height. */
 }
 
 .no-text-decoration {
@@ -738,7 +751,6 @@ $sidebar-display: "sidebar-display";
     height: $tab-height * $tab-count;
     margin-bottom: 2rem;
     padding-left: 0;
-    overflow: scroll;
 
     li {
       width: 100%;
@@ -830,7 +842,7 @@ $sidebar-display: "sidebar-display";
         color: var(--sidebar-active-color);
       }
     }
-    
+
     .icon-border {
       @extend %no-cursor;
 
@@ -881,6 +893,10 @@ $sidebar-display: "sidebar-display";
   z-index: 50;
   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
   background-color: var(--topbar-wrapper-bg);
+
+  [data-topbar-visible=false] & {
+    top: -$topbar-height; /* same as topbar height. */
+  }
 }
 
 #topbar {
@@ -904,10 +920,6 @@ $sidebar-display: "sidebar-display";
           padding: 0 0.3rem;
         }
       }
-    }
-
-    a[disabled] {
-      pointer-events: none;
     }
   }
 } // #topbar
@@ -1154,32 +1166,6 @@ $sidebar-display: "sidebar-display";
 
   $footer-height: $footer-height-mobile; // overwrite
 
-  #main > div.row:first-child > div:first-child {
-    min-height: calc(100vh - #{$topbar-height} - #{$footer-height});
-  }
-
-  #core-wrapper {
-    min-height: calc(100vh - #{$topbar-height} - #{$footer-height} - #{$bottom-min-height}) !important;
-
-    h1 {
-      margin-top: 2.2rem;
-      font-size: 1.75rem;
-    }
-  }
-
-  #avatar > a {
-    width: 5rem;
-    height: 5rem;
-  }
-
-  .site-subtitle {
-    @include ml-mr(1.8rem);
-  }
-
-  #main-wrapper {
-    padding-bottom: $footer-height;
-  }
-
   footer {
     height: $footer-height;
 
@@ -1198,27 +1184,58 @@ $sidebar-display: "sidebar-display";
     }
   }
 
+  #main > div.row:first-child > div:first-child {
+    min-height: calc(100vh - #{$topbar-height} - #{$footer-height});
+  }
+
+  #core-wrapper {
+    min-height: calc(100vh - #{$topbar-height} - #{$footer-height} - #{$bottom-min-height}) !important;
+
+    h1 {
+      margin-top: 2.2rem;
+      font-size: 1.75rem;
+    }
+
+    .post-content {
+      > blockquote[class^=prompt-] {
+        @include ml-mr(-1.25rem);
+        border-radius: 0;
+      }
+    }
+
+  }
+
+  #avatar > a {
+    width: 5rem;
+    height: 5rem;
+  }
+
+  .site-subtitle {
+    @include ml-mr(1.8rem);
+  }
+
+  #main-wrapper {
+    padding-bottom: $footer-height;
+  }
+
 }
 
 /* hide sidebar and panel */
 @media all and (max-width: 849px) {
-  %slide {
-    -webkit-transition: transform 0.4s ease;
-    transition: transform 0.4s ease;
+  @mixin slide($append: null) {
+    $basic: transform 0.4s ease;
+    @if $append {
+      -webkit-transition: $basic, $append;
+      transition: $basic, $append;
+    } @else {
+      -webkit-transition: $basic;
+      transition: $basic;
+    }
   }
 
   html,
   body {
     overflow-x: hidden;
-  }
-
-  .footnotes ol > li {
-    padding-top: 3.5rem;
-    margin-top: -3.2rem;
-
-    &:first-child {
-      margin-top: -3.5rem;
-    }
   }
 
   [#{$sidebar-display}] {
@@ -1230,11 +1247,10 @@ $sidebar-display: "sidebar-display";
     #main-wrapper {
       transform: translateX(#{$sidebar-width});
     }
-
   }
 
   #sidebar {
-    @extend %slide;
+    @include slide;
 
     transform: translateX(-#{$sidebar-width}); // hide
     -webkit-transform: translateX(-#{$sidebar-width});
@@ -1247,7 +1263,7 @@ $sidebar-display: "sidebar-display";
   }
 
   #main-wrapper {
-    @extend %slide;
+    @include slide;
 
     padding-top: $topbar-height;
   }
@@ -1262,13 +1278,9 @@ $sidebar-display: "sidebar-display";
   }
 
   #topbar-wrapper {
-    @extend %slide;
+    @include slide(top 0.2s ease);
 
     left: 0;
-  }
-
-  .topbar-up {
-    top: 0 !important;
   }
 
   #main > div.row:first-child > div:nth-child(1),
@@ -1317,6 +1329,12 @@ $sidebar-display: "sidebar-display";
 
 } // max-width: 849px
 
+@media all and (max-width: 849px) and (orientation: portrait) {
+  [data-topbar-visible=false] #topbar-wrapper {
+    top: 0;
+  }
+}
+
 /* Phone & Pad */
 @media all and (min-width: 577px) and (max-width: 1199px) {
   footer > .d-flex > div {
@@ -1344,6 +1362,10 @@ $sidebar-display: "sidebar-display";
     min-width: 150px;
   }
 
+  #search-hints {
+    display: none;
+  }
+
   #search-result-wrapper {
     margin-top: 3rem;
   }
@@ -1356,10 +1378,6 @@ $sidebar-display: "sidebar-display";
   #back-to-top {
     bottom: 5.5rem;
     right: 1.2rem;
-  }
-
-  .topbar-up {
-    box-shadow: none !important;
   }
 
   #topbar-title {
@@ -1499,10 +1517,6 @@ $sidebar-display: "sidebar-display";
       position: relative;
       right: 24.3%;
     }
-  }
-
-  #search-hints {
-    display: none;
   }
 
   .post-content {

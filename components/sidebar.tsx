@@ -9,7 +9,7 @@ function SideBar() {
 
   return (
     <>
-      <div id="sidebar" className="d-flex flex-column align-items-end sidebar-display" lang={"en" /* replace here */}>
+      <div id="sidebar" className="d-flex flex-column align-items-end" lang={"en" /* replace here */}>
         <div className="profile-wrapper text-center">
           <div id="avatar">
             <a href="/" data-alt="avatar" className="mx-auto">

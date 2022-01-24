@@ -3,7 +3,14 @@ title: 'Getting Started'
 date: '2011-09-06 23:32:54.000000000 +09:00'
 categories: [Demo]
 pin: true
+toc: 
+  - Task list:
+  - Inline code:
+  - Code block:
+
 ---
+
+# Getting Started
 
 | Company                      | Contact          | Country |
 |:-----------------------------|:-----------------|--------:|
